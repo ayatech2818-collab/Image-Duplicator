@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  @apply bg-ink-950 text-slate-200 antialiased;
+  background-image:
+    radial-gradient(60rem 60rem at 110% -10%, rgba(99, 102, 241, 0.12), transparent 60%),
+    radial-gradient(50rem 50rem at -10% 110%, rgba(129, 140, 248, 0.1), transparent 60%);
+  background-attachment: fixed;
+}
+
+/* Custom range slider styling */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 9999px;
+  background: theme("colors.ink.700");
+  outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  background: theme("colors.brand.500");
+  border: 2px solid #fff;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  background: theme("colors.brand.500");
+  border: 2px solid #fff;
+  cursor: pointer;
+}
+
+/* Thin scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: theme("colors.ink.700");
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: theme("colors.ink.600");
+  background-clip: content-box;
+}
