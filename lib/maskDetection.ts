@@ -19,6 +19,60 @@ const DEFAULT_TOLERANCE = 48;
 /** Corner radii within this fraction of each other are treated as uniform. */
 const UNIFORM_TOLERANCE_FRAC = 0.18;
 
+/** Clamp every corner radius so it never exceeds half the box (an invalid rounded rect). */
+export function clampRadiiToBox(
+  radii: CornerRadii,
+  width: number,
+  height: number,
+): CornerRadii {
+  const cap = Math.max(0, Math.min(width, height) / 2);
+  const clamp = (v: number) => Math.max(0, Math.min(v, cap));
+  return { tl: clamp(radii.tl), tr: clamp(radii.tr), br: clamp(radii.br), bl: clamp(radii.bl) };
+}
+
+/** True when all four radii are within a small tolerance of each other. */
+export function radiiAreUniform(radii: CornerRadii): boolean {
+  const values = [radii.tl, radii.tr, radii.br, radii.bl];
+  const maxR = Math.max(...values);
+  const minR = Math.min(...values);
+  return maxR <= 1 || (maxR - minR) / maxR <= UNIFORM_TOLERANCE_FRAC;
+}
+
+/**
+ * Clamp geometry to the template bounds, clamp radii, and recompute `uniform`.
+ * Used whenever a mask is edited manually so it stays internally consistent.
+ */
+export function normalizeMask(
+  mask: DetectedMask,
+  naturalWidth: number,
+  naturalHeight: number,
+): DetectedMask {
+  const width = Math.max(4, Math.min(mask.width, naturalWidth));
+  const height = Math.max(4, Math.min(mask.height, naturalHeight));
+  const x = Math.max(0, Math.min(mask.x, naturalWidth - width));
+  const y = Math.max(0, Math.min(mask.y, naturalHeight - height));
+  const radii = clampRadiiToBox(mask.radii, width, height);
+  return { x, y, width, height, radii, uniform: radiiAreUniform(radii) };
+}
+
+/** A sensible default mask (centred, ~60% of the template) for manual calibration. */
+export function defaultManualMask(
+  naturalWidth: number,
+  naturalHeight: number,
+): DetectedMask {
+  const width = Math.round(naturalWidth * 0.6);
+  const height = Math.round(naturalHeight * 0.6);
+  const r = Math.round(Math.min(width, height) * 0.06);
+  return {
+    x: Math.round((naturalWidth - width) / 2),
+    y: Math.round((naturalHeight - height) / 2),
+    width,
+    height,
+    radii: { tl: r, tr: r, br: r, bl: r },
+    uniform: true,
+  };
+}
+
 interface AnalysisCanvas {
   data: Uint8ClampedArray;
   width: number;

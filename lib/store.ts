@@ -29,6 +29,8 @@ interface PosterState {
   setStep: (step: WizardStep) => void;
   setTemplate: (template: TemplateAsset | null) => void;
   setMask: (mask: DetectedMask | null) => void;
+  /** Load a template and its calibrated mask together (e.g. from the library). */
+  applyTemplate: (template: TemplateAsset, mask: DetectedMask, step?: WizardStep) => void;
   setFitMode: (mode: FitMode) => void;
 
   addPhotos: (photos: PhotoItem[]) => void;
@@ -67,6 +69,15 @@ export const usePosterStore = create<PosterState>((set) => ({
     }),
 
   setMask: (mask) => set({ mask }),
+
+  applyTemplate: (template, mask, step) =>
+    set((state) => {
+      if (state.template && state.template.url !== template.url) {
+        URL.revokeObjectURL(state.template.url);
+      }
+      return { template, mask, ...(step ? { step } : {}) };
+    }),
+
   setFitMode: (fitMode) => set({ fitMode }),
 
   addPhotos: (photos) =>

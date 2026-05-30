@@ -1,6 +1,8 @@
 "use client";
 
-import { Layers } from "lucide-react";
+import { useState } from "react";
+import { Layers, Library } from "lucide-react";
+import { LibraryPanel } from "@/components/library/LibraryPanel";
 import { Stepper } from "@/components/ui/Stepper";
 import { Step1Template } from "@/components/steps/Step1Template";
 import { Step2Photos } from "@/components/steps/Step2Photos";
@@ -15,6 +17,8 @@ export default function Home() {
   const setStep = usePosterStore((s) => s.setStep);
   const mask = usePosterStore((s) => s.mask);
   const photos = usePosterStore((s) => s.photos);
+
+  const [libraryOpen, setLibraryOpen] = useState(false);
 
   const hasPhotos = photos.length > 0;
   const hasResults = photos.some((p) => p.status === "done");
@@ -31,7 +35,7 @@ export default function Home() {
         <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-600 shadow-lg shadow-brand-600/30">
           <Layers className="h-6 w-6 text-white" />
         </span>
-        <div>
+        <div className="flex-1">
           <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">
             Poster Forge
           </h1>
@@ -39,6 +43,14 @@ export default function Home() {
             Batch-fit photos into a poster template — fully client-side.
           </p>
         </div>
+        <button
+          type="button"
+          onClick={() => setLibraryOpen(true)}
+          className="inline-flex items-center gap-2 rounded-lg border border-ink-700 bg-ink-900/60 px-3 py-2 text-sm font-medium text-slate-200 transition hover:bg-ink-800"
+        >
+          <Library className="h-4 w-4 text-brand-400" />
+          <span className="hidden sm:inline">Library</span>
+        </button>
       </header>
 
       <div className="mb-8 rounded-2xl border border-ink-800 bg-ink-900/40 p-4">
@@ -57,6 +69,8 @@ export default function Home() {
         Photos never leave your device — detection, composition, and ZIP export
         all run in the browser.
       </footer>
+
+      <LibraryPanel open={libraryOpen} onClose={() => setLibraryOpen(false)} />
     </main>
   );
 }

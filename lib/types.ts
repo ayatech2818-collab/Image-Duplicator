@@ -30,7 +30,14 @@ export interface TemplateAsset {
   /** Intrinsic dimensions of the source template file. */
   naturalWidth: number;
   naturalHeight: number;
+  /** Id of the library record this asset was loaded from, if any. */
+  sourceId?: string;
+  /** Human-friendly name carried over from the library. */
+  name?: string;
 }
+
+/** How the calibration workspace is currently being driven. */
+export type CalibrationMode = "auto" | "manual";
 
 /** Fit strategy applied when compositing a personal photo into the mask. */
 export type FitMode = "smart" | "fill";
