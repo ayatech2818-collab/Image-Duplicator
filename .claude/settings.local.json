@@ -8,7 +8,10 @@
       "PowerShell($conns = Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue | Where-Object { $_.LocalPort -in 3000,3001,3002 }; if \\($conns\\) { $conns | Select-Object LocalAddress, LocalPort, OwningProcess } else { \"No listener on 3000-3002\" })",
       "PowerShell(Get-CimInstance Win32_Process -Filter \"ProcessId=36660 OR ProcessId=30260\" | Select-Object ProcessId, @{n='Cmd';e={$_.CommandLine}} | Format-List)",
       "PowerShell(Stop-Process -Id 36660,30260 -Force; Start-Sleep -Milliseconds 800; \"Stopped. Remaining listeners on 3000/3001:\"; Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue | Where-Object { $_.LocalPort -in 3000,3001 } | Select-Object LocalPort, OwningProcess)",
-      "PowerShell(try { $page = Invoke-WebRequest -Uri \"http://localhost:3000/\" -UseBasicParsing -TimeoutSec 30; \"PAGE / -> $\\($page.StatusCode\\)\"; $chunks = [regex]::Matches\\($page.Content, '/_next/static/[^\"]+\\\\.js'\\) | ForEach-Object { $_.Value } | Select-Object -Unique -First 4; foreach \\($c in $chunks\\) { try { $r = Invoke-WebRequest -Uri \"http://localhost:3000$c\" -UseBasicParsing -TimeoutSec 30; \"  $\\($r.StatusCode\\)  $c\" } catch { \"  ERR $\\($_.Exception.Response.StatusCode.value__\\)  $c\" } } } catch { \"Request failed: $\\($_.Exception.Message\\)\" })"
+      "PowerShell(try { $page = Invoke-WebRequest -Uri \"http://localhost:3000/\" -UseBasicParsing -TimeoutSec 30; \"PAGE / -> $\\($page.StatusCode\\)\"; $chunks = [regex]::Matches\\($page.Content, '/_next/static/[^\"]+\\\\.js'\\) | ForEach-Object { $_.Value } | Select-Object -Unique -First 4; foreach \\($c in $chunks\\) { try { $r = Invoke-WebRequest -Uri \"http://localhost:3000$c\" -UseBasicParsing -TimeoutSec 30; \"  $\\($r.StatusCode\\)  $c\" } catch { \"  ERR $\\($_.Exception.Response.StatusCode.value__\\)  $c\" } } } catch { \"Request failed: $\\($_.Exception.Message\\)\" })",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
     ]
   }
 }
